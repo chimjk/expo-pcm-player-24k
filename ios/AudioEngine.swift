@@ -34,8 +34,8 @@ class AudioEngine {
     
     init() throws {
         avAudioEngine.attach(speechPlayer)
-        
-        guard let format = AVAudioFormat(standardFormatWithSampleRate: 16000, channels: 1) else {
+		let sampleRate: Double = 24000
+        guard let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1) else {
             throw AudioEngineError.audioFormatError
         }
         voiceIOFormat = format
@@ -212,9 +212,9 @@ class AudioEngine {
         let frameCount = UInt32(data.count) / 2 // 16-bit input = 2 bytes per frame
         
         let format = AVAudioFormat(commonFormat: .pcmFormatFloat32,
-                                   sampleRate: 16000,
-                                   channels: 1,
-                                   interleaved: false)!
+                           sampleRate: voiceIOFormat.sampleRate,
+                           channels: 1,
+                           interleaved: false)!
         
         guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCount) else {
             return nil

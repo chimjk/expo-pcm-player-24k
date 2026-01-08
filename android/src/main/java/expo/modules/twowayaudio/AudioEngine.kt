@@ -22,6 +22,7 @@ import kotlin.math.pow
 
 class AudioEngine (context: Context) {
     private val SAMPLE_RATE = 16000
+	private val SAMPLE_RATE_PLAYBACK = 24000
     private val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
     private val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
 
@@ -74,27 +75,27 @@ class AudioEngine (context: Context) {
         }, null)
 
         val bufferSize = AudioTrack.getMinBufferSize(
-            SAMPLE_RATE,
-            AudioFormat.CHANNEL_OUT_MONO,
-            AUDIO_FORMAT
+            SAMPLE_RATE_PLAYBACK,
+			AudioFormat.CHANNEL_OUT_MONO,
+			AUDIO_FORMAT
         )
 
         audioTrack = AudioTrack(
-            AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                .build(),
-            AudioFormat.Builder()
-                .setEncoding(AUDIO_FORMAT)
-                .setSampleRate(SAMPLE_RATE)
-                .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
-                .build(),
-            bufferSize,
-            AudioTrack.MODE_STREAM,
-            audioManager.generateAudioSessionId()
-        ).apply {
-            play()
-        }
+			AudioAttributes.Builder()
+				.setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+				.setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+				.build(),
+			AudioFormat.Builder()
+				.setEncoding(AUDIO_FORMAT)
+				.setSampleRate(SAMPLE_RATE_PLAYBACK) // 24k
+				.setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+				.build(),
+			bufferSize,
+			AudioTrack.MODE_STREAM,
+			audioManager.generateAudioSessionId()
+		).apply {
+			play()
+		}
     }
 
     private fun updateAudioRouting() {
